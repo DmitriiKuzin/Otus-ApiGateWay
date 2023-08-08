@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-otus-2-app-{{ .Release.Revision }}
+  labels:
+    {{- include "otus-2.labels" . | nindent 4 }}
+    app: {{ .Release.Name }}-otus-2-app-{{ .Release.Revision }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-otus-2-app-{{ .Release.Revision }}
+  template:
+    metadata:
+      name: {{ .Release.Name }}-otus-2-app-{{ .Release.Revision }}
+      labels:
+        app: {{ .Release.Name }}-otus-2-app-{{ .Release.Revision }}
+    spec:
+      serviceAccountName: jobs-pods-reader
+      initContainers:
+        - name: {{ .Release.Name }}-otus-2-app-{{ .Release.Revision }}-init
+          image: groundnuty/k8s-wait-for:v2.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - "job"
+            - {{ .Release.Name }}-otus-2-migrator-{{ .Release.Revision }}
+      containers:
+        - name: {{ .Release.Name }}-otus-2-app-{{ .Release.Revision }}
+          image: kuzindiman/otus-2-app:{{ .Chart.Version }}
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: DB_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  key: connectionString
+                  name: {{ .Release.Name }}-otus-2-db-connection
+      restartPolicy: Always
+      

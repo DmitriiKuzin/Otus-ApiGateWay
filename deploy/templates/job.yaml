@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-otus-2-migrator-{{ .Release.Revision }}
+  labels:
+    {{- include "otus-2.labels" . | nindent 4 }}   
+spec:
+  completions: 1
+  parallelism: 1
+  backoffLimit: 1
+  template:
+    metadata:
+      labels:{{- include "otus-2.labels" . | nindent 8 }}
+    spec:
+      initContainers:
+        - name: {{ .Release.Name }}-otus-2-migrator-{{ .Release.Revision }}-init
+          image: groundnuty/k8s-wait-for:v2.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - "pod"
+            - {{ .Release.Name }}-postgresql-0
+      serviceAccountName: jobs-pods-reader
+      restartPolicy: Never
+      containers:
+        - name: {{ .Release.Name }}-otus-2-migrator-{{ .Release.Revision }}
+          image: kuzindiman/otus-2-migrator:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: DB_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  key: connectionString
+                  name: {{ .Release.Name }}-otus-2-db-connection
