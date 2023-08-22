@@ -1,10 +1,15 @@
+using System.Text;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Prometheus;
 using UserService.DAL;
+using UserService.DAL.Model;
 using UserService.Dto;
+using UserService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddUserSecrets<Program>();
@@ -13,20 +18,23 @@ builder.Configuration.AddUserSecrets<Program>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<UserService.Services.UserService>();
+builder.Services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
+builder.Services.AddScoped<AuthService>();
 builder.Services.AddDbContext<UserContext>(optionsBuilder =>
 {
     optionsBuilder.UseNpgsql(builder.Configuration["DB_CONNECTION_STRING"]);
 });
-builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer("Bearer", options => {
-        options.Authority = "https://localhost:7256";
-// Our API app will call to the IdentityServer to get the authority
-
-        options.TokenValidationParameters = new TokenValidationParameters()
-        {
-            ValidateAudience = false, // Validate 
-        };
-    });
+builder.Services.AddAuthentication().AddJwtBearer(options =>
+{
+    var key = Encoding.ASCII.GetBytes("suck ass asgsfsefef afafsfrsfasf sfsfsefsfdhryjtyit6u45t23423e23d2tgr23r2r22r323r23t23y23r4wgdfgdb");
+    options.ClaimsIssuer = "user-service";
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidIssuer = "user-service",
+        ValidateAudience = false,
+        IssuerSigningKey = new SymmetricSecurityKey(key)
+    };
+});
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("ApiScope", policy =>
@@ -67,10 +75,16 @@ app.MapPost("api/User",
     }).WithOpenApi().ProducesProblem(500);
 
 app.MapPut("api/User",
-    async (UpdateUserDto user, [FromServices] UserService.Services.UserService userService) =>
+    async (UpdateUserDto user, HttpContext ctx, [FromServices] UserService.Services.UserService userService) =>
     {
-        return await userService.UpdateUser(user);
+        if (ctx.User.Claims.First(x => x.Type == "id").Value != user.Id.ToString()) return Results.Forbid();
+        return new AcceptedResult(await userService.UpdateUser(user));
     }).WithOpenApi().ProducesProblem(500);
+
+app.MapPost("api/auth/token", async ([FromBody] AuthenticateRequest authenticateRequest, [FromServices] AuthService authService) =>
+{
+    return await authService.GenerateAuthTokenAsync(authenticateRequest);
+});
 
 
 app.MapDelete("api/User", async (int userId, [FromServices] UserService.Services.UserService userService) =>
@@ -78,5 +92,6 @@ app.MapDelete("api/User", async (int userId, [FromServices] UserService.Services
     await userService.DeleteUser(userId);
     return Results.StatusCode(204);
 }).WithOpenApi().ProducesProblem(500);
+
 
 app.Run();

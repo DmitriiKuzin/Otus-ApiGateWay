@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UserService.DAL;
 
-var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+var connectionString = "Server=localhost;Port=5432;Database=otus-auth;User Id=postgres;Password=somepassword";//Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
 var optionsBuilder = new DbContextOptionsBuilder<UserContext>();
 optionsBuilder.UseNpgsql(connectionString, builder =>
 {

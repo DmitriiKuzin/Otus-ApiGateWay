@@ -14,6 +14,15 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     {
         options.SignIn.RequireConfirmedAccount = false;
+        options.Password = new PasswordOptions
+        {
+            RequireDigit = false,
+            RequiredLength = 3,
+            RequireLowercase = false,
+            RequireUppercase = false,
+            RequireNonAlphanumeric = false,
+            RequiredUniqueChars = 0
+        };
     })
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddRazorPages();

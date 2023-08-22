@@ -31,6 +31,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{
 		deploy\templates\_helpers.tpl = deploy\templates\_helpers.tpl
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthServiceV2", "AuthServiceV2\AuthServiceV2.csproj", "{326CB9A5-1791-4ED3-A5BD-05152B69326F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{29D892F4-C2CF-45CF-BFA9-9A1F24C857CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29D892F4-C2CF-45CF-BFA9-9A1F24C857CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29D892F4-C2CF-45CF-BFA9-9A1F24C857CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{326CB9A5-1791-4ED3-A5BD-05152B69326F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{326CB9A5-1791-4ED3-A5BD-05152B69326F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{326CB9A5-1791-4ED3-A5BD-05152B69326F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{326CB9A5-1791-4ED3-A5BD-05152B69326F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{97E30B3B-4A2A-4989-998B-A23AA709B9CB} = {CF3EA29F-4649-41E5-AD00-ED69D89EE402}
