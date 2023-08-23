@@ -1,7 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthService", "AuthService\AuthService.csproj", "{F33C169D-568D-43C7-A6F1-D5BA20151251}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserService", "UserService\UserService.csproj", "{90F9E444-B500-4A00-89A6-32AC60BBE0F9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserService.DAL", "UserService.DAL\UserService.DAL.csproj", "{8992576F-0AAA-4590-A277-C81ECCC9015A}"
@@ -31,18 +29,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{
 		deploy\templates\_helpers.tpl = deploy\templates\_helpers.tpl
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthServiceV2", "AuthServiceV2\AuthServiceV2.csproj", "{326CB9A5-1791-4ED3-A5BD-05152B69326F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F33C169D-568D-43C7-A6F1-D5BA20151251}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F33C169D-568D-43C7-A6F1-D5BA20151251}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F33C169D-568D-43C7-A6F1-D5BA20151251}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F33C169D-568D-43C7-A6F1-D5BA20151251}.Release|Any CPU.Build.0 = Release|Any CPU
 		{90F9E444-B500-4A00-89A6-32AC60BBE0F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{90F9E444-B500-4A00-89A6-32AC60BBE0F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90F9E444-B500-4A00-89A6-32AC60BBE0F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -55,10 +47,6 @@ Global
 		{29D892F4-C2CF-45CF-BFA9-9A1F24C857CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29D892F4-C2CF-45CF-BFA9-9A1F24C857CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29D892F4-C2CF-45CF-BFA9-9A1F24C857CF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{326CB9A5-1791-4ED3-A5BD-05152B69326F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{326CB9A5-1791-4ED3-A5BD-05152B69326F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{326CB9A5-1791-4ED3-A5BD-05152B69326F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{326CB9A5-1791-4ED3-A5BD-05152B69326F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{97E30B3B-4A2A-4989-998B-A23AA709B9CB} = {CF3EA29F-4649-41E5-AD00-ED69D89EE402}

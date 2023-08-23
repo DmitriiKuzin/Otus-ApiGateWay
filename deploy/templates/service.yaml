@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-otus-2-app-{{ .Release.Revision }}
+  name: {{ .Release.Name }}-user-service-{{ .Release.Revision }}
   labels:
-    name: {{ .Release.Name }}-otus-2-app-{{ .Release.Revision }}
+    name: {{ .Release.Name }}-user-service-{{ .Release.Revision }}
     release: {{ .Release.Name }}
-    {{- include "otus-2.labels" . | nindent 4 }}
+    {{- include "otus-auth.labels" . | nindent 4 }}
 spec:
   selector:
-    app: {{ .Release.Name }}-otus-2-app-{{ .Release.Revision }}
+    app: {{ .Release.Name }}-user-service-{{ .Release.Revision }}
   ports:
     - name: web
       protocol: TCP

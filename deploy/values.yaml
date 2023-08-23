@@ -1,8 +1,8 @@
-# Default values for otus-2.
+# Default values for otus-auth.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-namespace: "otus-2-test"
+namespace: "otus-auth-test"
 
 postgresPassword: &global-postgresPassword 35135143s5fasfawf
 host: &host "arch.homework"

@@ -3,7 +3,7 @@ kind: Role
 metadata:
   name: jobs-pods-reader
   labels:
-    {{- include "otus-2.labels" . | nindent 4 }}
+    {{- include "otus-auth.labels" . | nindent 4 }}
 rules:
   - apiGroups: ["", "batch"] # "" indicates the core API group
     resources: ["jobs", "pods"]

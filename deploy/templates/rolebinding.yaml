@@ -5,7 +5,7 @@ kind: RoleBinding
 metadata:
   name: jobs-pods-reader
   labels:
-    {{- include "otus-2.labels" . | nindent 4 }}
+    {{- include "otus-auth.labels" . | nindent 4 }}
 subjects:
   # You can specify more than one "subject"
   - kind: ServiceAccount

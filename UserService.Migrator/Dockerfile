@@ -3,16 +3,16 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine AS build
 WORKDIR /src
-COPY ["Otus.2/Otus.2.csproj", "Otus.2/"]
-RUN dotnet restore "Otus.2/Otus.2.csproj"  -r linux-musl-x64
+COPY ["UserService/UserService.csproj", "UserService/"]
+RUN dotnet restore "UserService/UserService.csproj"  -r linux-musl-x64
 COPY . .
-WORKDIR "/src/Otus.2.Migrator"
-RUN dotnet build "Otus.2.Migrator.csproj" -c Release -r linux-musl-x64 -o /app/build
+WORKDIR "/src/UserService.Migrator"
+RUN dotnet build "UserService.Migrator.csproj" -c Release -r linux-musl-x64 -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Otus.2.Migrator.csproj" -c Release --sc -o /app/publish -r linux-musl-x64
+RUN dotnet publish "UserService.Migrator.csproj" -c Release --sc -o /app/publish -r linux-musl-x64
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-CMD ["./Otus.2.Migrator"]
+CMD ["./UserService.Migrator"]

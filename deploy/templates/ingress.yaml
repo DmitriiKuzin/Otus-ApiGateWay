@@ -1,9 +1,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Release.Name }}-otus-2-{{ .Release.Revision }}
+  name: {{ .Release.Name }}-user-service-{{ .Release.Revision }}
   labels:
-    {{- include "otus-2.labels" . | nindent 4 }}
+    {{- include "otus-auth.labels" . | nindent 4 }}
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
@@ -16,7 +16,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ .Release.Name }}-otus-2-app-{{ .Release.Revision }}
+                name: {{ .Release.Name }}-user-service-{{ .Release.Revision }}
                 port:
                   number: 80
                 

@@ -1,6 +1,6 @@
 using System.Text;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +20,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<UserService.Services.UserService>();
 builder.Services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddHttpLogging(options => options.LoggingFields = HttpLoggingFields.All);
 builder.Services.AddDbContext<UserContext>(optionsBuilder =>
 {
     optionsBuilder.UseNpgsql(builder.Configuration["DB_CONNECTION_STRING"]);
@@ -47,6 +48,7 @@ builder.Services.AddAuthorization(options =>
 
 var app = builder.Build();
 
+app.UseHttpLogging();
 app.UseAuthentication();
 
 app.UseSwagger();
@@ -65,7 +67,11 @@ app.UseExceptionHandler(exceptionHandlerApp
     }));
 
 app.MapGet("api/User",
-        async (int userId, HttpContext context, [FromServices] UserService.Services.UserService userService) => { return await userService.GetUser(userId); })
+        async (int userId, HttpContext ctx, [FromServices] UserService.Services.UserService userService) =>
+        {
+            if (IsUserHasAccess(ctx, userId)) return Results.Forbid();
+            return Results.Ok(await userService.GetUser(userId));
+        })
     .WithOpenApi().ProducesProblem(500);
 
 app.MapPost("api/User",
@@ -77,8 +83,8 @@ app.MapPost("api/User",
 app.MapPut("api/User",
     async (UpdateUserDto user, HttpContext ctx, [FromServices] UserService.Services.UserService userService) =>
     {
-        if (ctx.User.Claims.First(x => x.Type == "id").Value != user.Id.ToString()) return Results.Forbid();
-        return new AcceptedResult(await userService.UpdateUser(user));
+        if (IsUserHasAccess(ctx, user.Id)) return Results.Forbid();
+        return Results.Ok(await userService.UpdateUser(user));
     }).WithOpenApi().ProducesProblem(500);
 
 app.MapPost("api/auth/token", async ([FromBody] AuthenticateRequest authenticateRequest, [FromServices] AuthService authService) =>
@@ -87,11 +93,18 @@ app.MapPost("api/auth/token", async ([FromBody] AuthenticateRequest authenticate
 });
 
 
-app.MapDelete("api/User", async (int userId, [FromServices] UserService.Services.UserService userService) =>
+app.MapDelete("api/User", async (int userId, HttpContext ctx, [FromServices] UserService.Services.UserService userService) =>
 {
+    if (IsUserHasAccess(ctx, userId)) return Results.Forbid();
     await userService.DeleteUser(userId);
     return Results.StatusCode(204);
 }).WithOpenApi().ProducesProblem(500);
 
 
 app.Run();
+
+static bool IsUserHasAccess(HttpContext ctx, int userId)
+{
+    if (ctx.User.Claims.FirstOrDefault(x => x.Type == "id")?.Value != userId.ToString()) return true;
+    return false;
+}

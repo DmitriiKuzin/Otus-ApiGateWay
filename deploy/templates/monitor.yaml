@@ -4,10 +4,10 @@ metadata:
   name: otus-web-app-monitor
   labels:
     release: {{ .Release.Name }}
-    {{- include "otus-2.labels" . | nindent 4 }}
+    {{- include "otus-auth.labels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      name: {{ .Release.Name }}-otus-2-app-{{ .Release.Revision }}
+      name: {{ .Release.Name }}-otus-auth-app-{{ .Release.Revision }}
   endpoints:
     - port: web
